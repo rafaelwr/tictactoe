@@ -24,6 +24,11 @@ for(let i = 0; i < boxes.length; i++) {
 
             if(player1 == player2) {
                 player1++;
+
+                if(secondPlayer == '1-player') {
+                    computerPlay();
+                    player2++;
+                }
             }else{
                 player2++;
             }
@@ -31,6 +36,22 @@ for(let i = 0; i < boxes.length; i++) {
             // Check who won
             checkWinCondition();
         }
+    });
+}
+
+// Buttons 2 Players or 1 Player
+for(let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('click', function() {
+        secondPlayer = this.getAttribute('id');
+
+        for(let j = 0; j < buttons.length; j++) {
+            buttons[j].style.display = 'none';
+        }
+
+        setTimeout(function() {
+            let container = document.querySelector('#container');
+            container.classList.remove('hide');
+        }, 500);
     });
 }
 
@@ -201,5 +222,33 @@ function declareWinner(winner){
 
     for(let i = 0; i < boxesToRemove.length; i++) {
         boxesToRemove[i].parentNode.removeChild(boxesToRemove[i]);
+    }
+}
+
+// Computer play
+function computerPlay() {
+    let cloneO = o.cloneNode(true);
+
+    counter = 0;
+    filled = 0;
+
+    for(let i = 0; i < boxes.length; i++) {
+        let randomNumber = Math.floor(Math.random() * 5);
+
+        // Only fill if the child is empty
+        if(boxes[i].childNodes[0] == undefined) {
+            if(randomNumber <= 1) {
+                boxes[i].appendChild(cloneO);
+                counter++;
+                break;
+            }
+        // Check how many are filled
+        } else {
+            filled++;
+        }
+    }
+
+    if(counter == 0 && filled < 9) {
+        computerPlay();
     }
 }
